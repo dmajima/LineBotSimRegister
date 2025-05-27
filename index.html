@@ -2,33 +2,52 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>筋トレ管理</title>
+    <title>SIM登録フォーム</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+
+    <style>
+        .datepicker-days th.dow:first-child,
+        .datepicker-days td:first-child {
+            color: #f00;
+        }
+        .datepicker-days th.dow:last-child,
+        .datepicker-days td:last-child {
+            color: #00f;
+        }
+    </style>
 </head>
 <body>
 
     <form class="w-75 mx-auto">
-        <p class="mt-3">名前</p>
+        <p class="mt-3">電話番号</p>
         <div>
-            <input class="form-control w-100 mt-1" name="name" placeholder="" required>
+            <input type="tel" id="tel" class="form-control w-100 mt-1" name="tel" placeholder="00000000000" required />
         </div>
-        <p class="mt-3">腕立て</p>
+        <p class="mt-3">キャリア</p>
         <div>
-            <input class="form-control w-100 mt-1" name="udetate" required>
+            <select id="career" class="form-control" aria-label="Default select example" required>
+                <option value="">--キャリアを選択--</option>
+                <option value="Y!mobile">Y!mobile</option>
+                <option value="UQmobile">UQmobile</option>
+                <option value="eximo+irumo">eximo+irumo</option>
+                <option value="楽天モバイル">楽天モバイル</option>
+                <option value="au">au</option>
+                <option value="Softbank">Softbank</option>
+                <option value="docomo">docomo</option>
+            </select>
         </div>
-        <p class="mt-3">腹筋</p>
+        <p class="mt-3">契約日付</p>
         <div>
-            <input class="form-control w-100 mt-1" name="fukkin" required>
-        </div>
-        <p class="mt-3">背筋</p>
-        <div>
-            <input class="form-control w-100 mt-1" name="haikin" required>
-        </div>
-        <p class="mt-3">スクワット</p>
-        <div>
-            <input class="form-control w-100 mt-1" name="sukuwat" required>
+            <div id='contractDate' class='input-group date'>
+                <input id="contractDateText" type='text' class="form-control" required />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
         </div>
         <input type="submit" class="mt-4 btn btn-primary" value="送信">
     </form>
@@ -36,14 +55,19 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
     <script>
         
         $(document).ready(function () {
-            const liffId = "**********-********";
+            const liffId = "2007483853-6xL08Gva";
             initializeLiff(liffId);
-        })
+        });
 
         function initializeLiff(liffId) {
             liff.init({
@@ -71,19 +95,50 @@
 
         $(function () {
             $('form').submit(function () {
-                const name    = $('input[name="name"]').val();
-                const udetate = $('input[name="udetate"]').val();
-                const fukkin  = $('input[name="fukkin"]').val();
-                const haikin  = $('input[name="haikin"]').val();
-                const sukuwat = $('input[name="sukuwat"]').val();
+                const param = {
+                    tel: $('#tel').val(),
+                    career: $('#career').val(),
+                    contactDate: $('#contractDateText').val(),
+                };
                 
-                const msg = `${name}\n${udetate}\n${fukkin}\n${haikin}\n${sukuwat}`;
+                const msg = JSON.stringify(param);
                 sendText(msg);
 
                 return false;
             });
         });
 
+    </script>
+    <script>
+        $(function() {
+            $('#contractDate').datetimepicker({
+                dayViewHeaderFormat: 'YYYY年 MMMM',
+                tooltips: {
+                    close: '閉じる',
+                    selectMonth: '月を選択',
+                    prevMonth: '前月',
+                    nextMonth: '次月',
+                    selectYear: '年を選択',
+                    prevYear: '前年',
+                    nextYear: '次年',
+                    selectTime: '時間を選択',
+                    selectDate: '日付を選択',
+                    prevDecade: '前期間',
+                    nextDecade: '次期間',
+                    selectDecade: '期間を選択',
+                    prevCentury: '前世紀',
+                    nextCentury: '次世紀',
+                },
+                format: 'YYYY/MM/DD',
+                locale: 'ja',
+                icons: {
+                    time: 'far fa-clock',
+                    date: 'far fa-calendar-alt',
+                    up: 'fas fa-arrow-up',
+                    down: 'fas fa-arrow-down',
+                },
+            });
+        });
     </script>
 
 </body>

@@ -65,14 +65,13 @@
 
     <script>
         window.onload = function (e) {
-            liff.init(function(data) {
-                initializeApp(data);
+            liff.init({
+                liffId: '2007483853-6xL08Gva'
+            })
+            .then(() => {
+                $('#lineId').val(liff.getDecodedIDToken().sub);
             });
         };
-        
-        function initializeApp(data) {
-            $('#lineId').val(data.context.userId);
-        }
         
         $(function () {
             $('form').submit(function () {

@@ -49,6 +49,7 @@
                 </span>
             </div>
         </div>
+        <input id="lineId" type="hidden" /> 
         <input type="submit" class="mt-4 btn btn-primary" value="送信">
     </form>
     
@@ -63,17 +64,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 
     <script>
-        let userId = '';
-
         window.onload = function (e) {
-            liff.init((data) => userId = data.context.userId);
+            liff.init(function(data) {
+                initializeApp(data);
+            });
         };
+        
+        function initializeApp(data) {
+            $('#lineId').val(data.context.userId);
+        }
         
         $(function () {
             $('form').submit(function () {
                 const param = {
                     action: 'SIM登録',
-                    user: userId,
+                    user: $('#lineId').val(),
                     tel: $('#tel').val(),
                     career: $('#career').val(),
                     contactDate: $('#contractDateText').val(),

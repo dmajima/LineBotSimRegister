@@ -65,30 +65,14 @@
 
     <script>
         
-        $(document).ready(function () {
-            const liffId = "2007483853-6xL08Gva";
-            initializeLiff(liffId);
-        });
-
-        function initializeLiff(liffId) {
-            liff.init({
-                liffId: liffId
-            }).then(() => {
-                $('#lineId').val(liff.getIDToken());
-                $.post({
-                    url: "https://api.line.me/oauth2/v2.1/verify",
-                    timeout: 10000,
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    dataType: 'json',
-                    data: { 'id_token': liff.getIDToken(), 'client_id': '2007483853' },
-                }).done(function (response) {
-                    $('#lineId').val(response.sub);
-                });
-            }).catch((err) => {
-                console.log('LIFF Initialization failed ', err);
+        window.onload = function (e) {
+            liff.init(function (data) {
+                initializeApp(data);
             });
+        };
+
+        function initializeApp(data) {
+            $('#lineId').val(data.context.userId);
         }
 
         function sendText(text) {

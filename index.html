@@ -49,7 +49,7 @@
                 </span>
             </div>
         </div>
-        <input id="lineId" type="text" /> 
+        <input id="lineId" type="hidden" /> 
         <input type="submit" class="mt-4 btn btn-primary" value="送信">
     </form>
     
@@ -82,17 +82,13 @@
                     career: $('#career').val(),
                     contactDate: $('#contractDateText').val(),
                 };
-                confirm(JSON.stringify(param));
-                return;
                 
+                $('#resultMessage').text(`「${param.tel}」の情報を登録しました。`);
                 $.ajax({
                     url: 'https://script.google.com/macros/s/AKfycbyjKqBMwsQvApiHge3p3ceRTFDqNnTW1l9zT-MooHvLQuv2sAsUM8viVB54gq2BNC1e/exec',
                     type: 'POST',
                     data: JSON.stringify(param),
-                    contentType: 'text/plain',
-                    success: function(data) {
-                        $('#resultMessage').text(`「${param.tel}」の情報を登録しました。`);
-                    },
+                    contentType: 'text/plain'
                 });
 
                 return false;

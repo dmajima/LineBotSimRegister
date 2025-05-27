@@ -21,7 +21,7 @@
     </style>
 </head>
 <body>
-
+    <p id="resultMessage" class="mt-2"></p>
     <form class="w-75 mx-auto">
         <p class="mt-3">電話番号</p>
         <div>
@@ -64,41 +64,29 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 
     <script>
-        
+        let userId = '';
+
         window.onload = function (e) {
-            liff.init(function (data) {
-                initializeApp(data);
-            });
+            liff.init((data) => userId = data.context.userId);
         };
-
-        function initializeApp(data) {
-            $('#lineId').val(data.context.userId);
-        }
-
-        function sendText(text) {
-            liff.sendMessages([{
-                'type': 'text',
-                'text': text
-            }]).then(function () {
-                liff.closeWindow();
-            }).catch(function (error) {
-                window.alert('Failed to send message ' + error);
-            });
-        }
         
-        const params = (new URL(document.location)).searchParams;
-        const key = params.get('key');
-
         $(function () {
             $('form').submit(function () {
                 const param = {
+                    user: userId,
                     tel: $('#tel').val(),
                     career: $('#career').val(),
                     contactDate: $('#contractDateText').val(),
                 };
                 
-                const msg = JSON.stringify(param);
-                sendText(msg);
+                $.ajax({
+                    url: 'https://script.google.com/macros/s/AKfycbyjKqBMwsQvApiHge3p3ceRTFDqNnTW1l9zT-MooHvLQuv2sAsUM8viVB54gq2BNC1e/exec',
+                    type: 'PUT',
+                    data: param,
+                    success: function(data) {
+                        $('#resultMessage').text(`「${param.tel}」の情報を登録しました。`);
+                    },
+                });
 
                 return false;
             });

@@ -73,6 +73,7 @@
         $(function () {
             $('form').submit(function () {
                 const param = {
+                    action: 'SIM登録',
                     user: userId,
                     tel: $('#tel').val(),
                     career: $('#career').val(),
@@ -81,8 +82,10 @@
                 
                 $.ajax({
                     url: 'https://script.google.com/macros/s/AKfycbyjKqBMwsQvApiHge3p3ceRTFDqNnTW1l9zT-MooHvLQuv2sAsUM8viVB54gq2BNC1e/exec',
-                    type: 'PUT',
-                    data: param,
+                    type: 'POST',
+                    data: JSON.stringify(param),
+                    contentType: 'text/plain',
+                    dataType: 'json',
                     success: function(data) {
                         $('#resultMessage').text(`「${param.tel}」の情報を登録しました。`);
                     },

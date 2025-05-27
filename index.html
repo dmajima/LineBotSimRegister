@@ -83,6 +83,8 @@
                     career: $('#career').val(),
                     contactDate: $('#contractDateText').val(),
                 };
+                confirm(JSON.stringify(param));
+                return;
                 
                 $.ajax({
                     url: 'https://script.google.com/macros/s/AKfycbyjKqBMwsQvApiHge3p3ceRTFDqNnTW1l9zT-MooHvLQuv2sAsUM8viVB54gq2BNC1e/exec',
